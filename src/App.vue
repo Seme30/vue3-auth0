@@ -9,12 +9,33 @@
       <v-btn to="/about" class="mr-2">About</v-btn>
       <v-btn to="/contact" class="mr-2">Contact</v-btn>
       <v-btn to="/members" class="mr-2">Members</v-btn>
+      <v-btn v-if="this.$store.state.userIsAuthorized"   @click="logout">Logout</v-btn>
     </v-toolbar>
     <v-content>
       <router-view></router-view>
     </v-content>
   </v-app>
 </template>
+
+<script>
+  export default {
+    name: "App",
+    setup(){
+
+      // eslint-disable-next-line
+      const beforeCreate = () => {}
+      const logout = () => {
+        console.log('logging out')
+      }
+
+      return {
+        clientId: process.env.VUE_APP_AUTH0_CONFIG_CLIENTID,
+        beforeCreate,
+        logout
+      }
+    }
+  }
+</script>
 
 <style>
 #app {
