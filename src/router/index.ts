@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import Auth0CallBack from "../views/Auth0CallBack.vue"
 import store from "@/store";
 
 const routes: Array<RouteRecordRaw> = [
@@ -7,6 +8,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "home",
     component: HomeView,
+  },
+  {
+    path: "/auth0callback",
+    name: "auth0callback",
+    component: Auth0CallBack,
   },
   {
     path: "/about",
@@ -45,25 +51,38 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
-  const routerAuthCheck = true
-  if(routerAuthCheck){
-    store.commit('setUserIsAuthenticated', true)
+router.beforeEach(async (to, from, next) => {
+  // Initialize Auth0 client if it hasn't been initialized yet
+  if (!store.state.auth0) {
+    await store.dispatch('initAuth');
   }
-  //check if it is a protected page
+
+  if(to.matched.some(record => record.path == "/auth0callback")){
+    console.log("router.beforeEach found /Auth0CallBack url");
+    store.dispatch('auth0HandleAuthentication')
+  }
+
+  // Check if the user is authenticated
+  const routerAuthCheck = store.state.userIsAuthenticated;
+
+  if(routerAuthCheck){
+    store.commit('setUserIsAuthenticated', routerAuthCheck)
+  }
+
+  // Check if it is a protected page
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    //check if user is authenticated
+    // Check if user is authenticated
     if(routerAuthCheck){
-        // user is authenticated
-        // TODO: commit to Store that the user is authenticated
-        next()
+      // User is authenticated
+      next()
     } else {
       router.replace('/login')
     }
   } 
-  // allow page to load
+  // Allow page to load
   else {
     next();
   }
 });
+
 export default router;

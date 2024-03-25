@@ -33,12 +33,13 @@
 
 <script>
 import { defineComponent } from 'vue';
+import store from '@/store';
 
 export default defineComponent({
     name: "LoginView",
     setup(){
         const auth0Login = () => {
-         this.store.dispatch('auth0Login')
+         store.dispatch('auth0Login')
         }
         return {
             auth0Login
