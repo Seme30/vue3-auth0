@@ -59,6 +59,7 @@ export default createStore({
         try {
           await (await context.state.auth0).handleRedirectCallback();
           context.state.userIsAuthenticated = await (await context.state.auth0).isAuthenticated();
+          console.log(context.state.userIsAuthenticated)
           context.state.user = (await context.state.auth0).getUser();
           console.log("Success")
           router.replace('/')

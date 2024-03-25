@@ -17,15 +17,19 @@
   </v-app>
 </template>
 
-<script>
+<script lang="ts">
 import router from './router'
-import store from './store'
+import { useStore } from 'vuex'
+import { computed } from 'vue';
+
 
   export default {
     name: "App",
     setup(){
 
-      const userIsAuthenticated = store.state.user
+      const store = useStore();
+
+      const userIsAuthenticated = computed(() => store.state.userIsAuthenticated)
 
       const beforeCreate = () => {}
       const logout = () => {

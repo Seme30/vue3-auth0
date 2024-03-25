@@ -63,7 +63,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   // Check if the user is authenticated
-  const routerAuthCheck = store.state.userIsAuthenticated;
+  const routerAuthCheck = await (await store.state.auth0)?.isAuthenticated();
 
   if(routerAuthCheck){
     store.commit('setUserIsAuthenticated', routerAuthCheck)
@@ -84,5 +84,6 @@ router.beforeEach(async (to, from, next) => {
     next();
   }
 });
+
 
 export default router;
