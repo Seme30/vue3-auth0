@@ -1,12 +1,8 @@
 import { createStore } from "vuex";
-import { createAuth0, } from "@auth0/auth0-vue";
-import { createAuth0Client } from "@auth0/auth0-spa-js";
+import { User, createAuth0Client } from "@auth0/auth0-spa-js";
 import router from "../router/index";
 
 
-interface User {
-  // Define the properties of the User object here
-}
 
 const config = {
   domain: process.env.VUE_APP_AUTH0_CONFIG_DOMAIN,
