@@ -34,6 +34,7 @@ import { computed } from 'vue';
       const beforeCreate = () => {}
       const logout = () => {
         console.log('logging out')
+        store.dispatch('auth0Logout')
       }
 
       const login = () => {

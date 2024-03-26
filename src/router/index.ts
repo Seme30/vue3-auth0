@@ -13,12 +13,18 @@ const routes: Array<RouteRecordRaw> = [
     path: "/auth0callback",
     name: "auth0callback",
     component: Auth0CallBack,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/about",
     name: "about",
     component: () =>
       import("../views/AboutView.vue"),
+      meta: {
+        requiresAuth: true
+      }
   },
   {
     path: "/contact",

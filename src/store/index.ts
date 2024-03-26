@@ -71,11 +71,17 @@ export default createStore({
       }
     },
     
-    auth0Logout(context){
-      // context.state.auth0.logout({
-      //   returnTo: window.location.origin,
-      // });
-    } 
+    async auth0Logout(context){
+      if (!context.state.auth0) {
+        await context.dispatch('initAuth');
+      }
+      else {
+        (await context.state.auth0).logout();
+        context.state.userIsAuthenticated = false;
+        context.state.user = undefined;
+      }
+    }
+    
   },
     
   modules: {},
