@@ -1,9 +1,11 @@
 import { createStore } from "vuex";
 import { User, createAuth0Client } from "@auth0/auth0-spa-js";
 import router from "../router/index";
-import { useQuery } from "@vue/apollo-composable";
-import { GET_LESSONS, GET_STUDENTS } from "@/graphql/queries";
+import { useMutation, useQuery } from "@vue/apollo-composable";
+import { CREATE_STUDENT, GET_LESSONS, GET_STUDENTS } from "@/graphql/queries";
 import { watchEffect } from "vue";
+import { Student } from "@/graphql/models";
+import { apolloClient } from "@/main";
 
 
 const config = {
@@ -18,7 +20,8 @@ const store = createStore({
     loading: true,
     auth0: undefined as ReturnType<typeof createAuth0Client> | undefined,
     lessons: [],
-    students: []
+    students: [],
+    student: undefined as Student | undefined
   },
   getters: {},
   mutations: {
@@ -34,6 +37,9 @@ const store = createStore({
     setStudents(state, students) {
       state.students = students;
     },
+    addStudent(state, student){
+      state.student = student
+    }
   },
   actions: {
     async initAuth(context){
@@ -121,6 +127,21 @@ const store = createStore({
         }
       });
     },
+
+    async createStudent(context, {  firstName, lastName }) {
+      await apolloClient.mutate({ 
+        mutation: CREATE_STUDENT,
+        variables: { firstName, lastName } 
+      })
+      .then(({ data }) => {
+        if (data) {
+          context.commit('addStudent', data.createStudent);
+        }
+      })
+      .catch((error: any) => {
+        console.error('Error creating student:', error);
+      });
+    } 
     
   },
     

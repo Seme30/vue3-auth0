@@ -24,3 +24,12 @@ query {
     }
   }
 `;
+
+export const CREATE_STUDENT = gql`
+mutation createStudent($firstName: String!, $lastName: String!) {
+  createStudent(createStudentInput: { firstName: $firstName, lastName: $lastName }) {
+    id
+    firstName
+    lastName
+  }
+}`;

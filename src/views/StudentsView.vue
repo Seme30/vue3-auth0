@@ -17,6 +17,13 @@
         </tr>
       </template>
     </v-data-table>
+
+    <v-spacer></v-spacer>
+    <v-btn color="primary">
+    <router-link to="/addstudents">
+      <span class="add-student-link">Add Student</span>
+    </router-link>
+  </v-btn>
   </v-card>
 </template>
 
@@ -68,4 +75,17 @@ h1 {
   width: 80%;
   margin: 0 auto;
   }
+
+  button{
+    margin: 20px 0px;
+  }
+  a{
+    text-decoration: none;
+  }
+
+  .add-student-link {
+  padding: 20px;
+  color: white;
+  font-weight: bold;
+}
 </style>

@@ -50,6 +50,14 @@ const routes: Array<RouteRecordRaw> = [
       requiresAuth: true
     }
   },
+  {
+    path: "/addstudents",
+    name: "addStudents",
+    component: () => import("../views/AddStudentsView.vue"),
+    meta: {
+      requiresAuth: true
+    }
+  }
 ];
 
 const router = createRouter({
