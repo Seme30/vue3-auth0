@@ -1,8 +1,8 @@
 import { createStore } from "vuex";
 import { User, createAuth0Client } from "@auth0/auth0-spa-js";
 import router from "../router/index";
-import lessons from "./modules/lessons";
-import students from "./modules/students";
+import { useQuery } from "@vue/apollo-composable";
+import { GET_LESSONS, GET_STUDENTS } from "@/graphql/queries";
 
 
 const config = {
@@ -26,6 +26,12 @@ const store = createStore({
     },
     setAuth0Client(state, auth0Client: ReturnType<typeof createAuth0Client>) {
       state.auth0 = auth0Client;
+    },
+    setLessons(state, lessons) {
+      state.lessons = lessons;
+    },
+    setStudents(state, students) {
+      state.students = students;
     },
   },
   actions: {
@@ -82,14 +88,28 @@ const store = createStore({
         context.state.userIsAuthenticated = false;
         context.state.user = undefined;
       }
-    }
+    },
+
+    async fetchLessons({ commit }) {
+      const { result } = useQuery(GET_LESSONS);
+      const { data, loading, error } = result.value;
+
+      if (!loading && !error) {
+        commit('setLessons', data.lessons);
+      }
+    },
+    async fetchStudents({ commit }) {
+      const { result } = useQuery(GET_STUDENTS);
+      const { data, loading, error } = result.value;
+
+      if (!loading && !error) {
+        commit('setStudents', data.students);
+      }
+    },
     
   },
     
   modules: {},
 });
-
-store.registerModule("lessons", lessons);
-store.registerModule("students", students);
 
 export default store;
