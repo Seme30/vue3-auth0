@@ -8,6 +8,14 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import {  mdi } from "vuetify/iconsets/mdi";
 import "@mdi/font/css/materialdesignicons.css";
+import { ApolloClient, InMemoryCache } from '@apollo/client/core';
+import { DefaultApolloClient } from '@vue/apollo-composable';
+
+
+const apolloClient = new ApolloClient({
+  uri: process.env.VUE_APP_GRAPHQL_API_ENDPOINT,
+  cache: new InMemoryCache(),
+});
 
 const vuetify = createVuetify({
   components,
@@ -20,4 +28,4 @@ const vuetify = createVuetify({
   },
 });
 
-createApp(App).use(store).use(vuetify).use(router).mount("#app");
+createApp(App).provide(DefaultApolloClient, apolloClient).use(store).use(vuetify).use(router).mount("#app");
