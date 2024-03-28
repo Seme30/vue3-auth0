@@ -2,6 +2,7 @@ import { createStore } from "vuex";
 import { User, createAuth0Client } from "@auth0/auth0-spa-js";
 import router from "../router/index";
 import lessons from "./modules/lessons";
+import students from "./modules/students";
 
 
 const config = {
@@ -15,7 +16,8 @@ const store = createStore({
     user: undefined as User | undefined,
     loading: true,
     auth0: undefined as ReturnType<typeof createAuth0Client> | undefined,
-    lessons: []
+    lessons: [],
+    students: []
   },
   getters: {},
   mutations: {
@@ -88,5 +90,6 @@ const store = createStore({
 });
 
 store.registerModule("lessons", lessons);
+store.registerModule("students", students);
 
 export default store;
