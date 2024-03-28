@@ -13,7 +13,7 @@ import { DefaultApolloClient } from '@vue/apollo-composable';
 
 
 const apolloClient = new ApolloClient({
-  uri: process.env.VUE_APP_GRAPHQL_API_ENDPOINT,
+  uri: 'http://localhost:3000/graphql',
   cache: new InMemoryCache(),
 });
 
