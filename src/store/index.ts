@@ -1,7 +1,7 @@
 import { createStore } from "vuex";
 import { User, createAuth0Client } from "@auth0/auth0-spa-js";
 import router from "../router/index";
-
+import lessons from "./modules/lessons";
 
 
 const config = {
@@ -9,12 +9,13 @@ const config = {
   clientId: process.env.VUE_APP_AUTH0_CONFIG_CLIENTID
 };
 
-export default createStore({
+const store = createStore({
   state: {
     userIsAuthenticated: false as boolean | undefined,
     user: undefined as User | undefined,
     loading: true,
     auth0: undefined as ReturnType<typeof createAuth0Client> | undefined,
+    lessons: []
   },
   getters: {},
   mutations: {
@@ -23,7 +24,7 @@ export default createStore({
     },
     setAuth0Client(state, auth0Client: ReturnType<typeof createAuth0Client>) {
       state.auth0 = auth0Client;
-    }
+    },
   },
   actions: {
     async initAuth(context){
@@ -46,6 +47,7 @@ export default createStore({
       (await context.state.auth0)?.loginWithRedirect();
       context.state.userIsAuthenticated = await (await context.state.auth0)?.isAuthenticated(),
       context.state.user = (await context.state.auth0)?.getUser()
+      console.log(context.state.user)
     },
     async auth0HandleAuthentication(context){
       if (!context.state.auth0) {
@@ -57,7 +59,9 @@ export default createStore({
           context.state.userIsAuthenticated = await (await context.state.auth0).isAuthenticated();
           console.log(context.state.userIsAuthenticated)
           context.state.user = (await context.state.auth0).getUser();
+          // context.commit('setUserRole', user['https://myapp.example.com/role']);
           console.log("Success")
+          console.log(context.state.user)
           router.replace('/')
         } catch (error) {
           console.error("Error handling redirect");
@@ -82,3 +86,7 @@ export default createStore({
     
   modules: {},
 });
+
+store.registerModule("lessons", lessons);
+
+export default store;
