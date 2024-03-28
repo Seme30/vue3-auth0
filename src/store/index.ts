@@ -3,6 +3,7 @@ import { User, createAuth0Client } from "@auth0/auth0-spa-js";
 import router from "../router/index";
 import { useQuery } from "@vue/apollo-composable";
 import { GET_LESSONS, GET_STUDENTS } from "@/graphql/queries";
+import { watchEffect } from "vue";
 
 
 const config = {
@@ -90,21 +91,35 @@ const store = createStore({
       }
     },
 
-    async fetchLessons({ commit }) {
-      const { result } = useQuery(GET_LESSONS);
-      const { data, loading, error } = result.value;
-
-      if (!loading && !error) {
-        commit('setLessons', data.lessons);
-      }
+    async fetchLessons(context) {
+      const resultData = useQuery(GET_LESSONS);
+      
+      watchEffect(() => {
+        if (!resultData.loading.value) {
+          const { result } = resultData;
+          if (result.value) {
+            const { lessons } = result.value;
+            context.commit('setLessons', lessons);
+          } else {
+            console.log("No data");
+          }
+        }
+      });
     },
-    async fetchStudents({ commit }) {
-      const { result } = useQuery(GET_STUDENTS);
-      const { data, loading, error } = result.value;
-
-      if (!loading && !error) {
-        commit('setStudents', data.students);
-      }
+    async fetchStudents(context) {
+      const resultData = useQuery(GET_STUDENTS);
+      
+      watchEffect(() => {
+        if (!resultData.loading.value) {
+          const { result } = resultData;
+          if (result.value) {
+            const { students } = result.value;
+            context.commit('setStudents', students);
+          } else {
+            console.log("No data");
+          }
+        }
+      });
     },
     
   },
