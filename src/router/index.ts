@@ -42,10 +42,10 @@ const routes: Array<RouteRecordRaw> = [
       import("../views/LoginView.vue"),
   },
   {
-    path: "/members",
-    name: "members",
+    path: "/students",
+    name: "students",
     component: () =>
-      import("../views/MembersView.vue"),
+      import("../views/StudentsView.vue"),
     meta: {
       requiresAuth: true
     }
