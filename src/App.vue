@@ -8,8 +8,20 @@
       <v-btn to="/" class="mr-2">Home</v-btn>
       <v-btn to="/lessons" class="mr-2">Lessons</v-btn>
       <v-btn to="/students" class="mr-2">Students</v-btn>
-      <v-btn v-if="userIsAuthenticated"   @click="logout">Logout</v-btn>
+      <v-btn v-if="userIsAuthenticated"   @click="toggleDialog">Logout</v-btn>
       <v-btn v-if="!userIsAuthenticated"   @click="login">Login</v-btn>
+
+      <v-dialog v-model="dialog" persistent max-width="290px">
+      <v-card>
+        <v-card-title>Confirm Logout</v-card-title>
+        <v-card-text>Are you sure you want to logout?</v-card-text>
+        <v-card-actions>
+          <v-btn color="blue darken-1" @click="toggleDialog">Cancel</v-btn>
+          <v-btn color="blue darken-1" @click="logout">Confirm</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     </v-toolbar>
     <v-content>
       <router-view></router-view>
@@ -20,13 +32,14 @@
 <script lang="ts">
 import router from './router'
 import { useStore } from 'vuex'
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 
   export default {
     name: "App",
     setup(){
 
+      const dialog = ref<boolean>(false)
       const store = useStore();
 
       const userIsAuthenticated = computed(() => store.state.userIsAuthenticated)
@@ -35,6 +48,10 @@ import { computed } from 'vue';
       const logout = () => {
         console.log('logging out')
         store.dispatch('auth0Logout')
+      }
+
+      const toggleDialog = () => {
+        dialog.value = !dialog.value
       }
 
       const login = () => {
@@ -46,7 +63,9 @@ import { computed } from 'vue';
         beforeCreate,
         logout,
         userIsAuthenticated,
-        login
+        login,
+        dialog,
+        toggleDialog
       }
     }
   }
