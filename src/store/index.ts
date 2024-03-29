@@ -115,20 +115,19 @@ const store = createStore({
       });
     },
     async fetchStudents(context) {
-      const resultData = useQuery(GET_STUDENTS);
-      
-      watchEffect(() => {
-        if (!resultData.loading.value) {
-          const { result } = resultData;
-          if (result.value) {
-            const { students } = result.value;
-            context.commit('setStudents', students);
-          } else {
-            console.log("No data");
-          }
-        }
+      const { data, loading, error } = await apolloClient.query({
+        query: GET_STUDENTS
       });
-    },
+      
+      if (error) {
+        console.error('Error fetching students:', error);
+        return;
+      }
+    
+      if (!loading && data) {
+        context.commit('setStudents', data.students);
+      }
+    },        
 
     async createStudent(context, {  firstName, lastName }) {
       await apolloClient.mutate({ 

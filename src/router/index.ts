@@ -8,6 +8,9 @@ const routes: Array<RouteRecordRaw> = [
     path: "/",
     name: "home",
     component: HomeView,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/auth0callback",
