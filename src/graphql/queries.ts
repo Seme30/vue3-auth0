@@ -33,3 +33,23 @@ mutation createStudent($firstName: String!, $lastName: String!) {
     lastName
   }
 }`;
+
+export const CREATE_LESSON = gql`
+mutation createLesson($name: String!, $startDate: String!, $endDate: String!, $students: [ID!]) {
+  createLesson(createLessonInput: {
+    name: $name,
+    startDate: $startDate,
+    endDate: $endDate,
+    students: $students
+  }) {
+    id
+    name
+    students {
+      id
+      firstName
+      lastName
+    }
+  }
+}`;
+
+

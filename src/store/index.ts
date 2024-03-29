@@ -1,10 +1,10 @@
 import { createStore } from "vuex";
 import { User, createAuth0Client } from "@auth0/auth0-spa-js";
 import router from "../router/index";
-import { useMutation, useQuery } from "@vue/apollo-composable";
-import { CREATE_STUDENT, GET_LESSONS, GET_STUDENTS } from "@/graphql/queries";
+import { useQuery } from "@vue/apollo-composable";
+import { CREATE_LESSON, CREATE_STUDENT, GET_LESSONS, GET_STUDENTS } from "@/graphql/queries";
 import { watchEffect } from "vue";
-import { Student } from "@/graphql/models";
+import { Lesson, Student } from "@/graphql/models";
 import { apolloClient } from "@/main";
 
 
@@ -19,9 +19,8 @@ const store = createStore({
     user: undefined as User | undefined,
     loading: true,
     auth0: undefined as ReturnType<typeof createAuth0Client> | undefined,
-    lessons: [],
-    students: [],
-    student: undefined as Student | undefined
+    lessons: [] as Lesson[],
+    students: [] as Student[],
   },
   getters: {},
   mutations: {
@@ -38,7 +37,10 @@ const store = createStore({
       state.students = students;
     },
     addStudent(state, student){
-      state.student = student
+      state.students = [...state.students, student]
+    },
+    addLesson(state, lesson){
+      state.lessons = [...state.lessons, lesson]
     }
   },
   actions: {
@@ -136,12 +138,29 @@ const store = createStore({
       .then(({ data }) => {
         if (data) {
           context.commit('addStudent', data.createStudent);
+          router.replace('/students')
         }
       })
       .catch((error: any) => {
         console.error('Error creating student:', error);
       });
-    } 
+    } ,
+
+    async createLesson(context, { name, startDate, endDate, students }) {
+      await apolloClient.mutate({
+        mutation: CREATE_LESSON,
+        variables: { name, startDate, endDate, students }
+      })
+      .then(({ data }) => {
+        if (data) {
+          context.commit('addLesson', data.createLesson);
+          router.replace('/lessons')
+        }
+      })
+      .catch((error: any) => {
+        console.error('Error creating lesson:', error);
+      });
+    }    
     
   },
     
