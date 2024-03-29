@@ -6,7 +6,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn to="/" class="mr-2">Home</v-btn>
-      <v-btn to="/about" class="mr-2">About</v-btn>
+      <v-btn to="/lessons" class="mr-2">Lessons</v-btn>
       <v-btn to="/students" class="mr-2">Students</v-btn>
       <v-btn v-if="userIsAuthenticated"   @click="logout">Logout</v-btn>
       <v-btn v-if="!userIsAuthenticated"   @click="login">Login</v-btn>

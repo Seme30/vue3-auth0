@@ -27,10 +27,19 @@ const routes: Array<RouteRecordRaw> = [
       }
   },
   {
-    path: "/contact",
-    name: "contact",
+    path: "/lessons",
+    name: "lessons",
     component: () =>
-      import("../views/ContactsView.vue"),
+      import("../views/LessonsView.vue"),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/addlesson",
+    name: "addlesson",
+    component: () =>
+      import("../views/AddLessonsView.vue"),
     meta: {
       requiresAuth: true
     }
